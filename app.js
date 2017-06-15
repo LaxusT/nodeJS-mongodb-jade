@@ -12,7 +12,8 @@ mongoose.connect("mongodb://localhost:27017/imooc")
 app.set("views", "./views/pages")
 app.set("view engine", "pug")
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(express.static(path.join(__dirname, "bower_components")))
+app.use(express.static(path.join(__dirname, "public")))
+app.locals.moment = require("moment");
 app.listen(port)
 
 // index page
@@ -42,11 +43,10 @@ app.get("/movie/:id", function(req, res){
 // admin update movie
 app.get("/admin/update/:id", function(req, res){
 	var id = req.params.id;
-
+	console.log(id)
 	if(id){
 		Movie.findById(id, function(err, movie){
 			if(err) console.log(err)
-
 			res.render("admin", {
 				title: "imooc 更新页",
 				movie: movie
@@ -58,7 +58,6 @@ app.get("/admin/update/:id", function(req, res){
 // admin post movie
 app.post("/admin/movie", function(req, res){
 	var id = null;
-	console.log(req.body)
 	if("id" in req.body){
 		id = req.body.id;
 	}
@@ -70,9 +69,19 @@ app.post("/admin/movie", function(req, res){
 			if(err) console.log(err)
 
 			_movie = _.extend(movie, movieObj)
-			_movie.save(function(err, movie){
+			__movie = new Movie({
+				director: _movie.director,
+				title: _movie.title,
+				country: _movie.country,
+				language: _movie.language,
+				year: _movie.year,
+				poster: _movie.poster,
+				summary: _movie.summary,
+				flash: _movie.flash
+			})
+			__movie.save(function(err, movie){
 				if(err) console.log(err)
-				res.res.redirect("/movie/" + movie.id)
+				res.redirect("/movie/" + movie.id)
 			})
 		})
 	} else {
@@ -99,14 +108,14 @@ app.get("/admin", function(req, res){
 	res.render("admin", { 
 		title: "imooc 后台",
 		movie: {
-			title: "title",
-			director: "director",
-			country: "country",
-			language: "language",
-			poster: "poster",
-			flash: "flash",
-			year: "year",
-			summary: "summary"
+			title: "",
+			director: "",
+			country: "",
+			language: "",
+			poster: "",
+			flash: "",
+			year: "",
+			summary: ""
 		}
 	})
 })
@@ -121,6 +130,22 @@ app.get("/admin/list", function(req, res){
 			movies: movies
 		})
 	})
+})
+
+// remove list
+app.delete("/admin/list", function(req, res){
+	var id = req.query.id;
+	console.log(req)
+
+	if(id){
+		Movie.remove({_id: id}, function(err , movie){
+			if(err) {
+				console.log(err)
+			} else {
+				res.json({success:1})
+			}
+		})
+	}
 })
 
 
