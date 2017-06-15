@@ -1,0 +1,21 @@
+{
+  "name": "imooc",
+  "description": "imooc movie",
+  "main": "app.js",
+  "authors": [
+    "zhaojinxin"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/LaxusT/nodeJS-mongodb-jade",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
