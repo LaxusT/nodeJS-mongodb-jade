@@ -16,10 +16,17 @@
   "devDependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-jshint": "^2.0.4",
+    "gulp-nodemon": "^2.2.1",
     "jade": "^1.11.0",
+    "jshint": "^2.9.4",
+    "map-stream": "^0.0.7",
     "moment": "^2.18.1",
     "mongoose": "^4.10.6",
     "pug": "^2.0.0-rc.2",
+    "run-sequence": "^1.2.2",
     "underscore": "^1.8.3"
   }
 }
