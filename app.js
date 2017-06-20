@@ -1,11 +1,22 @@
 var express = require("express");
 var path = require("path");
-var port = 3000;
+var port = process.env.PORT || 3000;
 var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var Movie = require("./models/movie");
+var User = require("./models/user");
 var _ = require("underscore");
+
+var session = require("express-session");
+var cookieParser = require('cookie-parser');
+
+app.use(cookieParser());
+app.use(session({
+  secret: 'imooc',
+  resave: false,
+  saveUninitialized: false
+}));
 
 mongoose.connect("mongodb://localhost:27017/imooc");
 
@@ -18,6 +29,7 @@ app.listen(port);
 
 // index page
 app.get("/", function(req, res){
+	console.log(req.session.user);
 	Movie.fetch(function(err, movies){
 		if(err) console.log(err);
 
@@ -126,7 +138,7 @@ app.get("/admin/list", function(req, res){
 		if(err) console.log(err);
 
 		res.render("list", { 
-			title: "imooc 首页" ,
+			title: "imooc 列表页" ,
 			movies: movies
 		});
 	});
@@ -147,3 +159,78 @@ app.delete("/admin/list", function(req, res){
 		});
 	}
 });
+
+// signup
+app.post("/user/signup", function(req, res){
+	var reqUser = req.body;
+	var _user = new User(req.body);
+	User.find({name: reqUser.name}, function(err, user){
+		if(err){
+			console.log(err);
+		}
+		if(Object.keys(user).length !== 0){
+			console.log("用户已注册");
+		} else {
+			_user.save(function(err, user){
+				if(err){
+					console.log(err);
+				}
+				res.redirect("/admin/userlist");
+			});
+		}
+	});
+});
+
+// login
+app.post("/user/login", function(req, res){
+	var _user = req.body;
+	var name = _user.name;
+	var password = _user.password;
+
+	User.findOne({name: name}, function(err, user){
+		if(err){
+			console.log(err);
+		}
+
+		if(!user){
+			console.log("用户不存在");
+			return res.redirect("/");
+		}
+
+		user.comparePassword(password, function(err, isMatch){
+			if(err){
+				console.log(err);
+			}
+
+			if(isMatch){
+				req.session.user = user;
+				console.log("登录成功");
+			} else {
+				console.log("登录失败");
+			}
+		});
+	});
+});
+
+// user list page
+app.get("/admin/userlist", function(req, res){
+	User.fetch(function(err, users){
+		if(err) console.log(err);
+
+		res.render("userList", { 
+			title: "用户列表页" ,
+			users: users
+		});
+	});
+});
+
+
+
+
+
+
+
+
+
+
+

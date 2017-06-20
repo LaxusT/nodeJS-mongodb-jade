@@ -20,7 +20,7 @@ var MovieSchema = new mongoose.Schema({
 			default: Date.now()
 		}
 	}
-}) 
+});
 
 MovieSchema.pre("save", function(next){
 	if (this.isNew) {
@@ -29,24 +29,24 @@ MovieSchema.pre("save", function(next){
 		this.meta.updateAt = Date.now();
 	}
 
-	next()
-})
+	next();
+});
 
 MovieSchema.statics = {
 	fetch: function(cb){
 		return this
 			.find({})
 			.sort("meta.createAt")
-			.exec(cb)
+			.exec(cb);
 	},
 
 	findById: function(id, cb){
 		return this
 			.findOne({_id: mongoose.Types.ObjectId(id)})
 			.sort("meta.createAt")
-			.exec(cb)
+			.exec(cb);
 	}
-}
+};
 
 module.exports = MovieSchema;
 

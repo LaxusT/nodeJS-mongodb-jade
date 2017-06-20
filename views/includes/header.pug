@@ -3,3 +3,45 @@
 		.page-header
 			h1 #{title}
 			small 科幻迷
+.navbar.navbar-default.navbar-fixed-bottom
+	.container
+		.navbar-header
+			a.navbar-brand(href="/") 重度科幻迷
+		p.navbar-text.navbar-right
+			a.navbar-link(href="#", data-toggle="modal", data-target="#signupModal") 注册
+			span &nbsp; | &nbsp;
+			a.navbar-link(href="#", data-toggle="modal", data-target="#loginModal") 登录
+
+//- 注册 modal
+#signupModal.modal.fade
+	.modal-dialog
+		.modal-content
+			form(method="POST" action="/user/signup")
+				.modal-header 注册
+				.modal-body 
+					.form-group
+						label(for="signupName") 用户名
+						input#singupName.form-control(name="name" type="text")
+					.form-group
+						label(for="signupPassword") 密码
+						input#singupName.form-control(name="password" type="password")
+				.modal-footer
+					button.btn.btn-default(type="button" data-dismiss="modal") 关闭
+					button.btn.btn-success(type="submit") 提交
+
+//- 登录 modal
+#loginModal.modal.fade
+	.modal-dialog
+		.modal-content
+			form(method="POST" action="/user/login")
+				.modal-header 登陆
+				.modal-body 
+					.form-group
+						label(for="loginName") 用户名
+						input#singupName.form-control(name="name" type="text")
+					.form-group
+						label(for="loginPassword") 密码
+						input#singupName.form-control(name="password" type="password")
+				.modal-footer
+					button.btn.btn-default(type="button" data-dismiss="modal") 关闭
+					button.btn.btn-success(type="submit") 登陆

@@ -3,7 +3,6 @@ var nodemon = require("gulp-nodemon");
 
 // clean mission
 var clean = require('gulp-clean');
-var cleanFolder = require("./tool/cleanFolder");
 gulp.task('clean', function(){
 	return gulp.src("./tool/jsHintError/*")
     	.pipe(clean());
@@ -11,15 +10,15 @@ gulp.task('clean', function(){
 
 // js-lint mission
 var jsLint = require("./tool/jsLint");
-gulp.task("jsLint", jsLint(["./*.js", "./public/js/admin.js"]));
+gulp.task("jsLint", jsLint(["./*.js", "./public/js/*.js", "./schemas/*.js", "./models/*.js"]));
 
 // develop
 gulp.task("develop", function(){
 	var stream = nodemon({
 		script: "app.js",
 		ext: "html js",
-		ignore: ["ignored.js"]
-		// tasks: ["lint"]
+		ignore: ["ignored.js"],
+		tasks: ["clean"]
 	});
 
 	stream
