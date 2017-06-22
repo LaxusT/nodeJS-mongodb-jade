@@ -1,10 +1,30 @@
 extends ../layout
 
 block content
-	.container
+	.container(style="box-sizing:border-box;padding-bottom:90px;")
 		.row
 			.col-md-7
-				video(src=movie.flash allowFullScreen="true", quality="high", width="720", height="600", align="middle", type="application/x-shockware-flash")
+				video(src=movie.flash allowFullScreen="true", quality="high", width="720", height="400", align="middle", type="application/x-shockware-flash")
+				each item in comments
+					.row(style="margin:15px 0")
+						.col-md-2 
+							a.comment(href="#comments" data-cid=item._id, data-tid=item.from._id, style="display:block;width:50px;height:50px;background:yellow!important")
+						.col-md-10 
+							div 发表评论者:#{item.from.name}
+							div #{item.comment}
+							each item2 in item.reply
+								div 回复者:#{item2.from.name}
+								div 回复:#{item2.comment}
+				#comments
+					form#commmentForm(method="POST" action="/user/comment")
+						input(type="hidden" name="movie" value=movie._id)
+						.form-group
+						if user
+							input(type="hidden" name="from" value=user._id)
+							textarea.form-control(name="comment" row="3")
+							button.btn.btn-primary(type="submit") 提交
+						else
+							a.navbar-link(href="#", data-toggle="modal", data-target="#loginModal") 登录后评论
 			.col-md-5
 				dl.dl-horizontal
 					dt 电影名字
@@ -19,3 +39,4 @@ block content
 					dd #{movie.year}
 					dt 简洁
 					dd #{movie.summary}
+	script(src="/js/detail.js")
