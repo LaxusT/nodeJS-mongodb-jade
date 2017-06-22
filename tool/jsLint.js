@@ -20,7 +20,7 @@ var myReporter = map(function (file, cb) {
     results += `  line ${err.line}, col ${err.character}, code ${err.code}, ${err.reason}` + "\n";
   });
   txtErrorNum++;
-  fs.writeFileSync("./tool/jsHintError/" + txtErrorNum + ".txt", results, function(err){
+  fs.writeFileSync("./tool/jsLintError/" + txtErrorNum + ".txt", results, function(err){
     if(err) console.log(err);
   })
   cb(null, file);
