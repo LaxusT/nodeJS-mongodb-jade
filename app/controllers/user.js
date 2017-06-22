@@ -23,10 +23,12 @@ exports.signup = function(req, res){
 			console.log("用户已注册");
 			res.render("/signin")
 		} else {
+			console.log("注册成功")
 			_user.save(function(err, user){
 				if(err){
 					console.log(err);
 				}
+				req.session.user = user;
 				res.redirect("/");
 			});
 		}

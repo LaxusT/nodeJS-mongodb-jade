@@ -1,12 +1,14 @@
 var Index = require("../app/controllers/index");
 var User = require("../app/controllers/user");
 var Movie = require("../app/controllers/movie");
+var Comment = require("../app/controllers/comment");
 
 module.exports = function(app){
 	// pre handle user
 	app.use(function(req, res, next){
 		var _user = req.session.user;
 		app.locals.user = _user;
+		console.log(123123123)
 		return next()
 	})
 
@@ -28,4 +30,7 @@ module.exports = function(app){
 	app.get("/admin/userlist", User.signinRequired, User.adminRequired, User.userList);
 	app.get("/signin", User.signinPage)
 	app.get("/signup", User.signupPage)
+
+	// comment
+	app.post("/user/comment", User.signinRequired, Comment.save)
 };
