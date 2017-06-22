@@ -4,10 +4,19 @@ var SALT_WORK_FACTOR = 10;
 
 var UserSchema = new mongoose.Schema({
 	name: {
-		unique: true,
-		type: String
+		type: String,
+		unique: true
 	},
 	password: String,
+	role: {
+		type: Number,
+		default: 0
+	},
+	// 0: normal user
+	// 1: verified user
+	// 2: professional user
+
+	// >10: admin
 	meta: {
 		createAt: {
 			type: Date,

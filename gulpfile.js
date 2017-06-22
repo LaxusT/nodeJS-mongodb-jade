@@ -10,7 +10,7 @@ gulp.task('clean', function(){
 
 // js-lint mission
 var jsLint = require("./tool/jsLint");
-gulp.task("jsLint", jsLint(["./*.js", "./public/js/*.js", "./schemas/*.js", "./models/*.js"]));
+gulp.task("jsLint", jsLint(["./*.js", "./public/js/*.js", "app/*.js"]));
 
 // develop
 gulp.task("develop", function(){
