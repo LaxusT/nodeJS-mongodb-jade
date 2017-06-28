@@ -2,6 +2,7 @@ var Movie = require("../models/movie");
 var Comment = require("../models/comment");
 var Category = require("../models/category");
 var _ = require("underscore");
+var mongoose = require("mongoose");
 
 // detail movie page
 exports.detailMoviePage = function(req, res){
@@ -48,22 +49,33 @@ exports.adminPostMovie = function(req, res){
 	var movieObj = req.body;
 	var _movie = null;
 	if (id) {
-		// delete movieObj.id;
-		// var conditions = {_id: id};
-		// var updates = {$set: movieObj}
-		// Movie.update(conditions, updates, function(err){
-		// 	if(err) console.log(err);
-		// 	console.log("成功")
-		// })
 		Movie.findById(id, function(err, movie){
-			if(err) console.log(err);
-			delete movieObj.id;
-			_movie = _.extend(movie, movieObj);
-			console.log(_movie)
-			_movie.save(function(err, movie){
+			var categoryId = movie.category;
+			var movieId = movie._id;
+			Category.findById(categoryId, function(err, category){
 				if(err) console.log(err);
-				res.redirect("/movie/" + movie._id);
-			});
+				var arr = [];
+				category.movies.forEach(function(item, index){
+					if(item.toString() !== movieId.toString()){
+						arr.push(mongoose.Types.ObjectId(item));
+					}
+				})
+				category.movies = arr;
+				category.save(function(err, category){
+					if(err) console.log(err)
+					_movie = _.extend(movie, movieObj);
+					var categoryId = _movie.category;
+					_movie.save(function(err, movie){
+						if(err) console.log(err);
+						Category.findById(categoryId, function(err, category){
+							category.movies.push(movie._id)
+							category.save(function(err, category){
+								res.redirect("/movie/" + movie._id);
+							})
+						})
+					});
+				})
+			})
 		});
 	} else {
 		_movie = new Movie(movieObj);

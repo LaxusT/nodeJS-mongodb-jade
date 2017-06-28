@@ -14,8 +14,12 @@ block content
 					.col-sm-10
 						each cat in categories
 							label.radio-inline
-								input(type="radio" name="category" value=cat._id) 
-								| #{cat.name}
+								if movie._id
+									input(type="radio" name="category" value=cat._id checked=cat._id.toString()==movie.category.toString()) 
+									| #{cat.name}
+								else
+									input(type="radio" name="category" value=cat._id) 
+									| #{cat.name}
 				.form-group
 					label.col-sm-1.control-label(for="inputTitle") 电影名字
 					.col-sm-10
