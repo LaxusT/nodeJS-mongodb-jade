@@ -1,6 +1,8 @@
 var Movie = require("../models/movie");
 var Comment = require("../models/comment");
+var Category = require("../models/category");
 var _ = require("underscore");
+var mongoose = require("mongoose");
 
 // detail movie page
 exports.detailMoviePage = function(req, res){
@@ -11,7 +13,6 @@ exports.detailMoviePage = function(req, res){
 			.populate("from", "name")
 			.populate("reply.from reply.to", "name")
 			.exec(function(err, comments){
-				console.log(comments[0]['reply'])
 				res.render("detail", { 
 					title: "imooc " + movie.title,
 					movie: movie,
@@ -25,13 +26,15 @@ exports.detailMoviePage = function(req, res){
 // admin update movie
 exports.adminUpdateMovie = function(req, res){
 	var id = req.params.id;
-	console.log(id);
 	if(id){
-		Movie.findById(id, function(err, movie){
-			if(err) console.log(err);
-			res.render("admin", {
-				title: "imooc 更新页",
-				movie: movie
+		Category.find({}, function(err, categories){
+			Movie.findById(id, function(err, movie){
+				if(err) console.log(err);
+				res.render("admin", {
+					title: "imooc 更新页",
+					movie: movie,
+					categories: categories
+				});
 			});
 		});
 	}
@@ -45,59 +48,59 @@ exports.adminPostMovie = function(req, res){
 	}
 	var movieObj = req.body;
 	var _movie = null;
-	if (id !== null) {
+	if (id) {
 		Movie.findById(id, function(err, movie){
-			if(err) console.log(err);
-			_movie = _.extend(movie, movieObj);
-			__movie = new Movie({
-				director: _movie.director,
-				title: _movie.title,
-				country: _movie.country,
-				language: _movie.language,
-				year: _movie.year,
-				poster: _movie.poster,
-				summary: _movie.summary,
-				flash: _movie.flash
-			});
-			__movie.save(function(err, movie){
+			var categoryId = movie.category;
+			var movieId = movie._id;
+			Category.findById(categoryId, function(err, category){
 				if(err) console.log(err);
-				res.redirect("/movie/" + movie.id);
-			});
+				var arr = [];
+				category.movies.forEach(function(item, index){
+					if(item.toString() !== movieId.toString()){
+						arr.push(mongoose.Types.ObjectId(item));
+					}
+				})
+				category.movies = arr;
+				category.save(function(err, category){
+					if(err) console.log(err)
+					_movie = _.extend(movie, movieObj);
+					var categoryId = _movie.category;
+					_movie.save(function(err, movie){
+						if(err) console.log(err);
+						Category.findById(categoryId, function(err, category){
+							category.movies.push(movie._id)
+							category.save(function(err, category){
+								res.redirect("/movie/" + movie._id);
+							})
+						})
+					});
+				})
+			})
 		});
 	} else {
-		_movie = new Movie({
-			director: movieObj.director,
-			title: movieObj.title,
-			country: movieObj.country,
-			language: movieObj.language,
-			year: movieObj.year,
-			poster: movieObj.poster,
-			summary: movieObj.summary,
-			flash: movieObj.flash
-		});
-
+		_movie = new Movie(movieObj);
+		var categoryId = _movie.category;
 		_movie.save(function(err, movie){
 			if(err) console.log(err);
-			res.redirect("/movie/" + movie._id);
+			Category.findById(categoryId, function(err, category){
+				category.movies.push(movie._id)
+				category.save(function(err, category){
+					res.redirect("/movie/" + movie._id);
+				})
+			})
 		});
-	}
+	}																																					
 };
 
 // admin page
 exports.adminPage = function(req, res){
-	res.render("admin", { 
-		title: "imooc 后台",
-		movie: {
-			title: "",
-			director: "",
-			country: "",
-			language: "",
-			poster: "",
-			flash: "",
-			year: "",
-			summary: ""
-		}
-	});
+	Category.find({}, function(err, categories){
+		res.render("admin", { 
+			title: "imooc 后台",
+			categories: categories,
+			movie: {}
+		});
+	})
 };
 
 // list page

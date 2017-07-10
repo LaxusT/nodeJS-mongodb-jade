@@ -10,6 +10,7 @@ var session = require("express-session");
 var mongoStore = require("connect-mongo")(session);
 var cookieParser = require('cookie-parser');
 
+mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost:27017/imooc");
 app.use(cookieParser());
 app.use(session({
@@ -18,7 +19,7 @@ app.use(session({
   	saveUninitialized: false,
 	store: new mongoStore({
 		url: "mongodb://localhost:27017/imooc",
-		auto_reconnect: true,//issue 推荐解决方法
+		auto_reconnect: true,
 		collection: "sessions"
 	})
 }));
@@ -35,16 +36,5 @@ app.set("view engine", "pug");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.locals.moment = require("moment");
-require("./router/routes")(app)
+require("./router/routes")(app);
 app.listen(port);
-
-
-
-
-
-
-
-
-
-
-

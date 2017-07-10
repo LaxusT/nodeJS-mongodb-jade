@@ -5,25 +5,25 @@ $(function(){
 		var commentId = target.data("cid");
 
 		if($("#toId").length > 0){
-			$("#toId").val(tId)
+			$("#toId").val(tId);
 		} else {
 			$("<input>").attr({
 				id: "toId",
 				type: "hidden",
 				name: "tid",
 				value: tId
-			}).appendTo("#commmentForm")
+			}).appendTo("#commmentForm");
 		}
 		
 		if($("#commentId").length > 0){
-			$("#commentId").val(commentId)
+			$("#commentId").val(commentId);
 		} else {
 			$("<input>").attr({
 				id: "commentId",
 				type: "hidden",
 				name: "cid",
 				value: commentId
-			}).appendTo("#commmentForm")
+			}).appendTo("#commmentForm");
 		}
 	});
 });

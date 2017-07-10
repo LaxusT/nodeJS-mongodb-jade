@@ -5,6 +5,7 @@ block content
 		.row
 			.col-md-7
 				video(src=movie.flash allowFullScreen="true", quality="high", width="720", height="400", align="middle", type="application/x-shockware-flash")
+				.row(style="padding-left:25px;") 评论区
 				each item in comments
 					.row(style="margin:15px 0")
 						.col-md-2 
@@ -22,7 +23,7 @@ block content
 						if user
 							input(type="hidden" name="from" value=user._id)
 							textarea.form-control(name="comment" row="3")
-							button.btn.btn-primary(type="submit") 提交
+							button.btn.btn-primary(type="submit" style="margin-top:25px;") 提交
 						else
 							a.navbar-link(href="#", data-toggle="modal", data-target="#loginModal") 登录后评论
 			.col-md-5
