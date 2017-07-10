@@ -59,7 +59,7 @@ exports.login = function(req, res){
 				console.log("登录成功");
 				res.redirect("/");
 			} else {
-				res.redirect("/signin")
+				res.redirect("/signin");
 				console.log("登录失败");
 			}
 		});
