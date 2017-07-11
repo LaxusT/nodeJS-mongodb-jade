@@ -32,7 +32,7 @@ gulp.task("develop", function(){
 });
 
 var runSequence = require('run-sequence');
-gulp.task('task', function(callback) {
+gulp.task('default', function(callback) {
     runSequence(
     	"clean",
      	"jsLint",
