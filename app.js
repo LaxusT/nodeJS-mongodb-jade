@@ -14,9 +14,9 @@ mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost:27017/imooc");
 app.use(cookieParser());
 app.use(session({
-  	secret: 'imooc',
-  	resave: false,
-  	saveUninitialized: false,
+  secret: 'imooc',
+  resave: false,
+  saveUninitialized: false,
 	store: new mongoStore({
 		url: "mongodb://localhost:27017/imooc",
 		auto_reconnect: true,
