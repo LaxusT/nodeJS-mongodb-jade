@@ -38,4 +38,7 @@ module.exports = function(app){
 	app.get("/admin/category/new", User.signinRequired, User.adminRequired, Category.adminCategoryPage);
 	app.post("/admin/category", User.signinRequired, User.adminRequired, Category.saveCategory);
 	app.get("/admin/category/list", User.signinRequired, User.adminRequired, Category.categoryListPage);
+
+	// results
+	app.get("/results", Index.search);
 };
