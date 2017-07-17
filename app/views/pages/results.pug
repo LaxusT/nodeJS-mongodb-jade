@@ -20,9 +20,9 @@ block content
 				- for (var i = 0; i < totalPage; i ++){
 					- if(currentPage == (i + 1)){
 							li.active
-								span #{currentPage}
+								span #{i}
 					- } else {
-							// li
-								// a(href='/results?p='+i+'&cat=') #{i}
+							li
+								a(href='/results?page='+i+'&cat='+query) #{i}
 					- }
 				- }

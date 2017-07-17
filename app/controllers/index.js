@@ -19,7 +19,7 @@ exports.index = function(req, res){
 // search page
 exports.search = function(req, res){
 	var cateId = req.query.cat;
-	var page = req.query.page;
+	var page = parseInt(req.query.page, 10);
 	var count = 2;
 	var index = page * count;
 
@@ -44,7 +44,7 @@ exports.search = function(req, res){
 				currentPage: page + 1,
 				totalPage: Math.ceil(movies.length / count),
 				movies: results,
-				query: 'cat=' + cateId
+				query: cateId
 			});
 		})
 }
