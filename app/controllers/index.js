@@ -19,9 +19,31 @@ exports.index = function(req, res){
 // search page
 exports.search = function(req, res){
 	var cateId = req.query.cat;
-	var page = parseInt(req.query.page, 10);
+	var page = parseInt(req.query.page, 10) || 0;
 	var count = 2;
 	var index = page * count;
+	var q = req.query.q;
+
+	if(!cateId){
+		Movie
+			.find({title: new RegExp(q + '.*', 'i')})
+			.exec(function(err, movies){
+				if(err) console.log(err);
+
+				var results = movies.slice(index, index + count);
+
+				res.render("results", { 
+					title: "imooc 结果列表页面",
+					keyword: q,
+					currentPage: page + 1,
+					totalPage: Math.ceil(movies.length / count),
+					movies: results,
+					query: 'q=' + cateId
+				});
+			})
+
+		return
+	}
 
 	Category
 		.find({_id: cateId})

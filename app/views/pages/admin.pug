@@ -3,7 +3,7 @@ extends ../layout
 block content
 	.container(style="box-sizing:border-box; padding-bottom: 100px;")
 		.row
-			form.form-horizontal(method="post", action="/admin/movie")
+			form.form-horizontal(method="post" action="/admin/movie" enctype="multipart/form-data")
 				.form-group
 					label.col-sm-1.control-label(for="inputCategory") 豆掰同步
 					.col-sm-10
@@ -45,6 +45,10 @@ block content
 					label.col-sm-1.control-label(for="inputPoster") 海报地址
 					.col-sm-10
 						input#inputPoster.form-control(type="text", name="poster" value=movie.poster)
+				.form-group
+					label.col-sm-1.control-label(for="uploadPoster") 海报上传
+					.col-sm-10
+						input#uploadPoster(type="file", name="uploadPoster")
 				.form-group
 					label.col-sm-1.control-label(for="inputFlash") 片源地址
 					.col-sm-10

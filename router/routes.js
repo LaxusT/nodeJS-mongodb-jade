@@ -3,6 +3,8 @@ var User = require("../app/controllers/user");
 var Movie = require("../app/controllers/movie");
 var Comment = require("../app/controllers/comment");
 var Category = require("../app/controllers/category");
+var multer = require("multer");
+var upload = multer({ dest: 'uploads/' });
 
 module.exports = function(app){
 	// pre handle user
@@ -18,7 +20,7 @@ module.exports = function(app){
 	// movie
 	app.get("/movie/:id", Movie.detailMoviePage);
 	app.get("/admin/update/:id", User.signinRequired, User.adminRequired, Movie.adminUpdateMovie);
-	app.post("/admin/movie", User.signinRequired, User.adminRequired, Movie.adminPostMovie);
+	app.post("/admin/movie", upload.single('uploadPoster'), User.signinRequired, User.adminRequired, Movie.savePoster, Movie.adminPostMovie);
 	app.get("/admin", User.signinRequired, User.adminRequired, Movie.adminPage);
 	app.get("/admin/list", User.signinRequired, User.adminRequired, Movie.listPage);
 	app.delete("/admin/list", User.signinRequired, User.adminRequired, Movie.removeList);
